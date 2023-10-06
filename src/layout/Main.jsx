@@ -21,6 +21,12 @@ export default class Main extends React.Component {
                 cardList: data.Search,
                 loading: false,
             }))
+            .catch((err) => {
+                console.log(err);
+                this.setState({
+                    loading: false
+                })
+            })
     }
     
     fetchBD() {
@@ -40,9 +46,10 @@ export default class Main extends React.Component {
                     cardList: [],
                     loading: false,
                 }))
-            .catch(() => {
+            .catch((err) => {
+                console.log(err);
                 this.setState({
-                    loading: true,
+                    loading: false,
                 })
             })
     }
