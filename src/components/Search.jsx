@@ -1,40 +1,33 @@
-import React, {useEffect} from "react";
+import React, {useState} from "react";
 
-export default class Search extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            searchTitle: '',
-            searchYear: '',
-            searchType: '',
-        };
-    }
+const Search = (props) => {
+    const {
+        setSearch = Function.prototype,
+    } = props;
 
-    updSearch = () => {
-        this.props.setSearch(this.state.searchTitle, this.state.searchYear, this.state.searchType);
-    }
+    const [searchTitle, setSearchTitle] = useState('');
+    const [searchYear, setSearchYear] = useState('');
+    const [searchType, setSearchType] = useState('');
 
-    onKeyDown = (e) => {
+    const onKeyDown = (e) => {
         if (e.keyCode === 13) {
-            this.updSearch();
+            setSearch(searchTitle, searchYear, searchType);
         }
     }
 
-    onRadioChange = (e) => {
-        this.setState({[e.target.name]: e.target.value}, () => {
-            this.updSearch();
-        })
+    const onRadioChange = (e) => {
+        setSearchType(e.target.value);
+        setSearch(searchTitle, searchYear, e.target.value);
     }
 
-    render() {
-        return  <div onKeyDown={this.onKeyDown}> 
+        return  <div onKeyDown={onKeyDown}> 
                     <div className="input-field">
                         <input 
                             className="validate" 
                             type="search" 
                             placeholder="Поиск по названию"
-                            value={this.state.searchTitle}
-                            onChange={(e) => (this.setState({searchTitle: e.target.value}))} 
+                            value={searchTitle}
+                            onChange={(e) => (setSearchTitle(e.target.value))} 
                         />
                     </div> 
                     <div className="input-field">
@@ -43,12 +36,12 @@ export default class Search extends React.Component {
                                 className="validate"
                                 type="search" 
                                 placeholder="Поиск по году"
-                                value={this.state.searchYear}
-                                onChange={(e) => (this.setState({searchYear: e.target.value}))} 
+                                value={searchYear}
+                                onChange={(e) => (setSearchYear(e.target.value))} 
                             />
                             <a 
                                 className="icon-preview right"
-                                onClick={this.updSearch}
+                                onClick={() => setSearch(searchTitle, searchYear, searchType)}
                             >
                                 <i className="medium material-icons dp32 icon-search ">search</i>
                             </a>
@@ -57,23 +50,24 @@ export default class Search extends React.Component {
                     <div className="radioFilter">
                         <p>
                             <label className="radioItem">
-                                <input name="searchType" type="radio" defaultChecked value="" onChange={(e) => this.onRadioChange(e)}/>
+                                <input name="searchType" type="radio" defaultChecked value="" onChange={(e) => onRadioChange(e)}/>
                                 <span>Все</span>
                             </label>
                         </p>
                         <p>
                             <label className="radioItem">
-                                <input name="searchType" type="radio" value="movie" onChange={(e) => this.onRadioChange(e)}/>
+                                <input name="searchType" type="radio" value="movie" onChange={(e) => onRadioChange(e)}/>
                                 <span>Фильмы</span>
                             </label>
                         </p>
                         <p>
                             <label className="radioItem">
-                                <input name="searchType" type="radio" value="series" onChange={(e) => this.onRadioChange(e)}/>
+                                <input name="searchType" type="radio" value="series" onChange={(e) => onRadioChange(e)}/>
                                 <span>Сериалы</span>
                             </label>
                         </p>
                     </div>
                 </div>   
     }
-}
+
+    export { Search };
